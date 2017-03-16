@@ -1,0 +1,22 @@
+For sa.c (spectrum analyser):
+
+To compile:
+	gcc sa.c -o spec -lasound -lfftw3 -lm
+
+What can it do:
+	takes audio in from a microphone
+	generates real and imaginary parts of N sized fft
+	generates average value of buffer for levels info
+	writes fft data to .csv file
+	
+still to do:
+	streamline fft process, ensure is giving correct results
+
+code structure:
+	loop {
+		read samples in
+		get average amplitude value of samples coming in
+		store samples to fft input buffer
+	}
+	fft from buffer
+	get fft values
