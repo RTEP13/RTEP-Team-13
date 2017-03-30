@@ -1,0 +1,16 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,(2017-03-19 revision 2637835)-master*%
+%TF.CreationDate,2017-03-30T20:36:30+01:00*%
+%TF.ProjectId,kicad-rtep-audio-spectrum-analyser,6B696361642D727465702D617564696F,1.0.0*%
+%TF.FileFunction,Legend,Bot*%
+%TF.FilePolarity,Positive*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW (2017-03-19 revision 2637835)-master) date Thursday, 30 March 2017 20:36:30*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%ADD10C,0.203200*%
+G04 APERTURE END LIST*
+D10*
+M02*

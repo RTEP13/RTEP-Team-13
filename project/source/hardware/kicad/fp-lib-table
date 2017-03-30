@@ -1,0 +1,8 @@
+(fp_lib_table
+  (lib (name FAIRCHILD)(type KiCad)(uri ${KIPRJMOD}/_modules/FAIRCHILD.pretty)(options "")(descr ""))
+  (lib (name GRAPHICS)(type KiCad)(uri ${KIPRJMOD}/_modules/GRAPHICS.pretty)(options "")(descr ""))
+  (lib (name KNOWLES)(type KiCad)(uri ${KIPRJMOD}/_modules/KNOWLES.pretty)(options "")(descr ""))
+  (lib (name OSRAM)(type KiCad)(uri ${KIPRJMOD}/_modules/OSRAM.pretty)(options "")(descr ""))
+  (lib (name PASSIVE)(type KiCad)(uri ${KIPRJMOD}/_modules/PASSIVE.pretty)(options "")(descr ""))
+  (lib (name RASPBERRY-PI)(type KiCad)(uri ${KIPRJMOD}/_modules/RASPBERRY-PI.pretty)(options "")(descr ""))
+)
