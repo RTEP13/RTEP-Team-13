@@ -10,7 +10,7 @@ The goal of this project is to provide a hardware and software solution for a re
 
 ## Software requirements
 
-* [KiCad](http://kicad-pcb.org/) - Open source electronics design suit
+* [KiCad](http://kicad-pcb.org/) - Open source electronics design suite
 * [Alsa](https://www.alsa-project.org/) - Provides audio functionality to the Pi
 * [FFTW3](http://www.fftw.org/) - Software library for computing DFTs
 * [QT](https://www.qt.io/) - Provides user experience
