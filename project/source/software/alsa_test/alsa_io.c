@@ -6,14 +6,15 @@
 void some( int capture) {
   snd_pcm_t *handle;
   snd_pcm_hw_params_t *params;
- 
+  char *device = "plughw:0,0";
+
   int rc;
   /* Open PCM device for playback. */
   if (capture){
-  rc = snd_pcm_open(&handle, "default",
+  rc = snd_pcm_open(&handle, device,
                     SND_PCM_STREAM_CAPTURE, 0);
   } else { 
-  rc = snd_pcm_open(&handle, "default",
+  rc = snd_pcm_open(&handle, device,
                     SND_PCM_STREAM_PLAYBACK, 0);
   }
   if (rc < 0) {
@@ -37,13 +38,13 @@ void some( int capture) {
 
   /* Signed 16-bit little-endian format */
   snd_pcm_hw_params_set_format(handle, params,
-                              SND_PCM_FORMAT_S16_LE);
+                              SND_PCM_FORMAT_MU_LAW);
 
   /* Two channels (stereo) */
-  snd_pcm_hw_params_set_channels(handle, params, 2);
+  snd_pcm_hw_params_set_channels(handle, params, 1);
 
   /* 44100 bits/second sampling rate (CD quality) */
-  unsigned int val = 8000;
+  unsigned int val = 44100;
   int dir;
   snd_pcm_hw_params_set_rate_near(handle, params,
                                   &val, &dir);
@@ -65,7 +66,7 @@ void some( int capture) {
   /* Use a buffer large enough to hold one period */
   snd_pcm_hw_params_get_period_size(params, &frames,
                                     &dir);
-  int size = frames * 4; /* 2 bytes/sample, 2 channels */
+  int size = frames * 2; /* 2 bytes/sample, 2 channels */
   char * buffer;
   buffer = (char *) malloc(size);
 
@@ -129,7 +130,7 @@ while (loops > 0) {
 }
 
 int main (){
-  int cap = 0;
+  int cap =0;
   some(cap);
 return 0;
 }
