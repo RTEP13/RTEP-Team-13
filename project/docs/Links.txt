@@ -1,0 +1,2 @@
+Basic Pi hardware links         https://www.raspberrypi.org/documentation/hardware/raspberrypi/ 
+Pi Schematics 			https://www.raspberrypi.org/documentation/hardware/raspberrypi/schematics/README.md
