@@ -10,6 +10,7 @@
 #include <QBoxLayout>
 #include <QSpinBox>
 #include <QTextEdit>
+#include <QString>
 
 // class definition 'Window'
 class Window : public QWidget
@@ -56,6 +57,14 @@ private:
 	int bin_arr[bin_arr_size]={8,16,32,64,128,256,512,1024,2048};
 	int bins,pbins, bin_arr_pos;
 	int count;
+	
+
+	// strings
+	QString infoStr = "Hi there! <Insert information here about how to use the software>";
+	QString spec_x  = "Frequency (Hz)";
+	QString spec_y  = "Amplitude";
+	QString time_x  = "Time (s)";
+	QString time_y  = "Amplitude of signal";
 };
 
 #endif // WINDOW_H

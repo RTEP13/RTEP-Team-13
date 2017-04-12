@@ -9,7 +9,7 @@ Window::Window() : plot( QString("Waveform input") ), gain(5), count(0) // <-- '
 //	knob.setValue(gain);
 
 	help_text.setReadOnly(1);
-	help_text.setText("Hello World!");
+	help_text.setText(infoStr);
 	
 	bin_arr_pos = 4; 
 	spinner.setValue(bin_arr[bin_arr_pos]);	
@@ -47,8 +47,16 @@ Window::Window() : plot( QString("Waveform input") ), gain(5), count(0) // <-- '
 	spec_curve.setSamples(fft_x, fft_y, sampRate/2);
 	spec_curve.attach(&spec_plot);
 
+	
+
 	plot.replot();
 	spec_plot.replot();
+
+	plot.setAxisTitle(plot.xBottom,time_x);
+	plot.setAxisTitle(plot.yLeft, time_y);
+	spec_plot.setAxisTitle(spec_plot.xBottom,spec_x);
+	spec_plot.setAxisTitle(spec_plot.yLeft,spec_y);
+
 	plot.show();
 	spec_plot.show();
 
