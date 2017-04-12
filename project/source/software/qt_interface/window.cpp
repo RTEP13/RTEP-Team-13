@@ -10,10 +10,14 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 
 	help_text.setReadOnly(1);
 	help_text.setText(infoStr);
+
 	playBtn.setText("Play");
 	stopBtn.setText("Stop");
 	quitBtn.setText("Quit");
-
+	// either valueChanged or onClick?
+	connect ( &play, SIGNAL(valueChanged(double)), SLOT(play()) );
+	connect ( &stop, SIGNAL(valueChanged(double)), SLOT(stop()) );
+	connect ( &quit, SIGNAL(valueChanged(double)), SLOT(quit()) );
 	
 	bin_arr_pos = 4; 
 	spinner.setValue(bin_arr[bin_arr_pos]);	
@@ -40,7 +44,7 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	}
 	for( int iindex=0; iindex<(sampRate/2); ++iindex ) {
 		fft_x[iindex]=iindex;
-		fft_y[iindex]=iindex;
+		fft_y[iindex]=0;
 	}
 	
 	// make a plot curve from the data and attach it to the plot
@@ -143,4 +147,18 @@ void Window::setBins(int bins)
 		pbins = bin_arr[bin_arr_pos--];		
 	}
 	this->bins = pbins;
+}
+
+void Window::quit()
+{
+// quits the program, destructor called
+}
+
+void Window::play()
+{
+// start data aquisition, can only be used if !isPlay
+}
+
+void Window::stop(){
+// stop data aquisition, can only be used if isPlay
 }
