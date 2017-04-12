@@ -9,6 +9,7 @@
 
 #include <QBoxLayout>
 #include <QSpinBox>
+#include <QTextEdit>
 
 // class definition 'Window'
 class Window : public QWidget
@@ -29,13 +30,15 @@ private:
   // graphical elements from the Qwt library - http://qwt.sourceforge.net/annotated.html
 	QwtKnob      knob;
 	QwtThermo    thermo;
-	QwtPlot      plot,plot2;
+	QwtPlot      plot,spec_plot;
 	QwtPlotCurve amp_curve, spec_curve;
 	QSpinBox     spinner;
-
+	QTextEdit    help_text;
+	
 	// layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
-	QVBoxLayout  vLayout, vPlots;  // vertical layout
-	QHBoxLayout  hLayout;  // horizontal layout
+	
+	QVBoxLayout  vMainL, vSpecOptionsL;  // vertical layout
+	QHBoxLayout  hTimeL, hSpecL;  // horizontal layout
 
 	static const int plotDataSize = 128;
 
@@ -44,7 +47,14 @@ private:
 	double yData[plotDataSize];
 
 	double gain;
-	int bins, pbins;
+	
+	static const int sampRate = 500;
+	double fft_x[sampRate/2];
+	double fft_y[65536];
+
+	static const int bin_arr_size = 10;
+	int bin_arr[bin_arr_size]={8,16,32,64,128,256,512,1024,2048};
+	int bins,pbins, bin_arr_pos;
 	int count;
 };
 
