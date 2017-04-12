@@ -11,6 +11,9 @@
 #include <QSpinBox>
 #include <QTextEdit>
 #include <QString>
+#include <QPushButton>
+
+#include <specanal.h>
 
 // class definition 'Window'
 class Window : public QWidget
@@ -28,18 +31,22 @@ public slots:
 	void setBins(int bins);
 // internal variables for the window class
 private:
+	// Give samples and num samples, get fft, 	
+	Specanal     fft;
+	
   // graphical elements from the Qwt library - http://qwt.sourceforge.net/annotated.html
 	QwtKnob      knob;
 	QwtThermo    thermo;
 	QwtPlot      plot,spec_plot;
 	QwtPlotCurve amp_curve, spec_curve;
+
 	QSpinBox     spinner;
 	QTextEdit    help_text;
-	
+	QPushButton  playBtn, stopBtn, quitBtn;	
 	// layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
 	
-	QVBoxLayout  vMainL, vSpecOptionsL;  // vertical layout
-	QHBoxLayout  hTimeL, hSpecL;  // horizontal layout
+	QVBoxLayout  vMainL, vSpecOptionsL, vControlsL;  // vertical layout
+	QHBoxLayout  hTimeL, hSpecL, hPlayPauseL;  // horizontal layout
 
 	static const int plotDataSize = 128;
 

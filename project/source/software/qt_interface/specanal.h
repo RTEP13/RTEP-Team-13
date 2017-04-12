@@ -8,13 +8,15 @@ class Specanal
 
 public:
 	Specanal(); // constructor
-	void getPlan();
+	void setInSize(int fft_in_size);
+	void setOutSize(int fft_out_size);
+	void setPlan();
 	void executeFFT();
-	int fft_in_size=2048;
+	static const int fft_in_size=64;
 	double *fft_in;
 	fftw_complex *fft_out;
+	static const int fft_out_size = (fft_in_size/2)+1;
 private:
-	int fft_out_size = (fft_in_size/2)+1;
 	fftw_plan p;
 	int fft_full_flag;
 	
