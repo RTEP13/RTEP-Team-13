@@ -32,7 +32,7 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 
 	// set up the thermometer
 	thermo.setFillBrush( QBrush(Qt::green) );
-	thermo.setRange(0, 10);
+	//thermo.setRange(0, 10);
 	thermo.show();
 
 
