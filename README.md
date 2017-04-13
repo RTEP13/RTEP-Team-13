@@ -3,8 +3,8 @@
 Audio Level Indicator and Spectrum Analyser for the Raspberry Pi (Zero)
 
 ## Prerequisites
-Ensure to install qt, qwt and other dependencies entering the following commands into a terminal on the Pi:
-sudo apt-get install qt4-dev-tools libqt4-dev qt4-qmake g++ make qtcreator
+Ensure to install qt, qwt and other dependencies entering the following commands into a terminal on the Pi: <br />
+sudo apt-get install qt4-dev-tools libqt4-dev qt4-qmake g++ make qtcreator <br />
 sudo apt-get install libqwt-dev libqwt-doc libqwt6
 
 ## Introduction
