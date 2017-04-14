@@ -15,44 +15,39 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	stopBtn.setText("Stop");
 	quitBtn.setText("Quit");
 	// either valueChanged or onClick?
-	connect ( &play, SIGNAL(valueChanged(double)), SLOT(play()) );
-	connect ( &stop, SIGNAL(valueChanged(double)), SLOT(stop()) );
-	connect ( &quit, SIGNAL(valueChanged(double)), SLOT(quit()) );
+	connect ( &playBtn, SIGNAL(clicked()), SLOT(play()) );
+	connect ( &stopBtn, SIGNAL(clicked()), SLOT(stop()) );
+	connect ( &quitBtn, SIGNAL(clicked()), SLOT(quit()) );
 	
-	bin_arr_pos = 4; 
-	spinner.setValue(bin_arr[bin_arr_pos]);	
+	bin_arr_pos = 4; 	
 	spinner.setRange(8,1024);
 	spinner.setSuffix(" bins");
+	spinner.setValue(bin_arr[bin_arr_pos]);
 	connect(&spinner, SIGNAL(valueChanged(int)), SLOT(setBins(int)) ); 	
-	
 	
 	// use the Qt signals/slots framework to update the gain -
 	// every time the knob is moved, the setGain function will be called
-	connect( &knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
+//	connect( &knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
 
 	// set up the thermometer
 	thermo.setFillBrush( QBrush(Qt::green) );
-	//thermo.setRange(0, 10);
+	thermo.setRange(0, 10);
 	thermo.show();
 
-
+	double xData[tBuff.dataSize];
 	// set up the initial plot data
-	for( int index=0; index<plotDataSize; ++index )
+	for( int index=0; index<tBuff.dataSize; ++index )
 	{
 		xData[index] = index;
-		yData[index] = gain * sin( M_PI * index/15 );
-	}
-	for( int iindex=0; iindex<(sampRate/2); ++iindex ) {
-		fft_x[iindex]=iindex;
-		fft_y[iindex]=0;
+		tBuff.yData[index] = gain * sin( M_PI * index/15 );
 	}
 	
 	// make a plot curve from the data and attach it to the plot
-	amp_curve.setSamples(xData, yData, plotDataSize);
+	amp_curve.setSamples(xData, tBuff.yData, tBuff.dataSize);
 	amp_curve.attach(&plot);
 	
 	// don't need to fill up pre samples, can all be 0
-	spec_curve.setSamples(fft_x, fft_y, sampRate/2);
+	spec_curve.setSamples(fft.fft_x, fft.fft_y, fft.sampRate/2);
 	spec_curve.attach(&spec_plot);
 
 	plot.replot();
@@ -62,6 +57,7 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	plot.setAxisTitle(plot.yLeft, time_y);
 	spec_plot.setAxisTitle(spec_plot.xBottom,spec_x);
 	spec_plot.setAxisTitle(spec_plot.yLeft,spec_y);
+//	spec_plot.setAxisScale(spec_plot.yLeft,0, 100,0);
 
 	plot.show();
 	spec_plot.show();
@@ -96,12 +92,17 @@ void Window::timerEvent( QTimerEvent * )
 	++count;
 
 	// add the new input to the plot
-	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
-	yData[plotDataSize-1] = inVal;
+	// implement ring buffer here
 	
-	amp_curve.setSamples(xData, yData, plotDataSize);
-	plot.replot();
+	// remove N old samples, add N new samples
+	// keep yData plot
+	
+	tBuff.add(inVal);
+//	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );		
+//	yData[plotDataSize-1] = inVal;
 
+	amp_curve.setSamples(xData, tBuff.yData, tBuff.dataSize);
+	plot.replot();
 
 	// set the thermometer value
 	thermo.setValue( inVal +5);
@@ -118,14 +119,15 @@ void Window::timerEvent( QTimerEvent * )
 	// could be method, could be threaded
 	if(count > fft.fft_in_size){
 		for(int i=0; i<fft.fft_in_size;i++){
-			fft.fft_in[i]=	yData[i];
+		//	fft.fft_in[i]=yData[plotDataSize-fft.fft_in_size+i];
+			fft.fft_in[i]=tBuff.yData[i];
 		}
 		fft.setPlan();
 		fft.executeFFT();
 		for(int k=0; k<fft.fft_out_size; k++){
-			fft_y[k]=fft.fft_out[k][0];
+			fft.fft_y[k]=fft.fft_out[k][0];
 		}
-		spec_curve.setSamples(fft_x,fft_y,sampRate/2);
+		spec_curve.setSamples(fft.fft_x,fft.fft_y,fft.sampRate/2);
 		spec_plot.replot();
 	}
 	
@@ -140,25 +142,33 @@ void Window::setGain(double gain)
 }
 
 void Window::setBins(int bins)
-{
+{	
+	printf("input bins = %d\tpbins = %d", bins, pbins);
 	if(bins>pbins){
-		pbins = bin_arr[bin_arr_pos++];
+		bin_arr_pos++;
 	} else {
-		pbins = bin_arr[bin_arr_pos--];		
+		bin_arr_pos--;
 	}
+	pbins = bin_arr[bin_arr_pos];
+	spinner.setSpecialValueText(QString::number(pbins));
 	this->bins = pbins;
+	printf("setting output bins = %d\tthis bins = %d\n", pbins, this->bins);
 }
+
 
 void Window::quit()
 {
 // quits the program, destructor called
+	printf("quitting.. still to implement\n");
 }
 
 void Window::play()
 {
 // start data aquisition, can only be used if !isPlay
+	printf("playing.. still to implement\n");
 }
 
 void Window::stop(){
 // stop data aquisition, can only be used if isPlay
+	printf("stopping.. still to implement\n");
 }

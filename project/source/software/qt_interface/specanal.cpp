@@ -5,7 +5,11 @@ Specanal::Specanal()
 {
 // possible malloc for sizes of the fft?
 	fft_in = (double*)fftw_malloc(sizeof(double) * fft_in_size);
-	fft_out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * (fft_out_size));
+	fft_out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)* (fft_out_size));
+	for (int index=0; index<(sampRate/2); ++index){
+		fft_x[index]=index;
+		fft_y[index]=0;
+	}
 }
 
 void Specanal::setInSize(int fft_in_size){

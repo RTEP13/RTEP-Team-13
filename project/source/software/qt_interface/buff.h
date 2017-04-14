@@ -1,16 +1,15 @@
 #ifndef BUFF_H
 #define BUFF_H
 
-#include <boost/circular_buffer.hpp>
-
-class Buff : circular_buffer
+class Buff
 {
 
 public:
-	Buff();
-
+	Buff(int dataSize);
+	void add(double val);
+	static int dataSize;
 private:
-
+	int index;
 };
 
 #endif // BUFF_H

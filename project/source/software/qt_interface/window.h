@@ -14,6 +14,7 @@
 #include <QPushButton>
 
 #include <specanal.h>
+#include <buff.h>
 
 // class definition 'Window'
 class Window : public QWidget
@@ -29,10 +30,14 @@ public:
 public slots:
 	void setGain(double gain);
 	void setBins(int bins);
+	void stop();
+	void play();
+	void quit();
 // internal variables for the window class
 private:
 	// Give samples and num samples, get fft, 	
 	Specanal     fft;
+	Buff	     tBuff(int dataSize = 64);
 	
   // graphical elements from the Qwt library - http://qwt.sourceforge.net/annotated.html
 	QwtKnob      knob;
@@ -48,26 +53,25 @@ private:
 	QVBoxLayout  vMainL, vSpecOptionsL, vControlsL;  // vertical layout
 	QHBoxLayout  hTimeL, hSpecL, hPlayPauseL;  // horizontal layout
 
-	static const int plotDataSize = 128;
+//	static const int plotDataSize = 128;
 
 	// data arrays for the plot
-	double xData[plotDataSize];
-	double yData[plotDataSize];
+//	double xData[tBuff.dataSize];
+//	double yData[plotDataSize];
 
 	double gain;
 	
-	static const int sampRate = 500;
-	double fft_x[sampRate/2];
-	double fft_y[65536];
-
 	static const int bin_arr_size = 10;
-	int bin_arr[bin_arr_size]={8,16,32,64,128,256,512,1024,2048};
+	int bin_arr[bin_arr_size]={8,16,32,64,
+				128,256,512,
+				1024,2048};
 	int bins,pbins, bin_arr_pos;
 	int count;
 	
-
 	// strings
-	QString infoStr = "Hi there! <Insert information here about how to use the software>";
+	QString infoStr = "Hi there! <Insert \
+			information here about how \
+			 to use the software>";
 	QString spec_x  = "Frequency (Hz)";
 	QString spec_y  = "Amplitude";
 	QString time_x  = "Time (s)";
