@@ -1,7 +1,7 @@
 /* Copyright (c) 2011, RidgeRun
  * Copyright (c) 2014, Bernd Porr
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright
@@ -15,7 +15,7 @@
  * 4. Neither the name of the RidgeRun nor the
  *    names of its contributors may be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY RIDGERUN ''AS IS'' AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -41,7 +41,7 @@
 /****************************************************************
  * Constants
  ****************************************************************/
- 
+
 #define SYSFS_GPIO_DIR "/sys/class/gpio"
 
 /****************************************************************
@@ -49,19 +49,20 @@
  ****************************************************************/
 int gpio_export(unsigned int gpio)
 {
+  //fd = FileDescriptor
   int fd, len;
   char buf[MAX_BUF];
- 
+
   fd = open(SYSFS_GPIO_DIR "/export", O_WRONLY);
   if (fd < 0) {
     perror("gpio/export");
     return fd;
   }
- 
+
   len = snprintf(buf, sizeof(buf), "%d", gpio);
   write(fd, buf, len);
   close(fd);
- 
+
   return 0;
 }
 
@@ -72,13 +73,13 @@ int gpio_unexport(unsigned int gpio)
 {
   int fd, len;
   char buf[MAX_BUF];
- 
+
   fd = open(SYSFS_GPIO_DIR "/unexport", O_WRONLY);
   if (fd < 0) {
     perror("gpio/export");
     return fd;
   }
- 
+
   len = snprintf(buf, sizeof(buf), "%d", gpio);
   write(fd, buf, len);
   close(fd);
@@ -92,20 +93,20 @@ int gpio_set_dir(unsigned int gpio, unsigned int out_flag)
 {
   int fd;
   char buf[MAX_BUF];
- 
+
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR  "/gpio%d/direction", gpio);
- 
+
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
     perror("gpio/direction");
     return fd;
   }
- 
+
   if (out_flag)
     write(fd, "out", 4);
   else
     write(fd, "in", 3);
- 
+
   close(fd);
   return 0;
 }
@@ -117,20 +118,20 @@ int gpio_set_value(unsigned int gpio, unsigned int value)
 {
   int fd;
   char buf[MAX_BUF];
- 
+
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
- 
+
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
     perror("gpio/set-value");
     return fd;
   }
- 
+
   if (value)
     write(fd, "1", 2);
   else
     write(fd, "0", 2);
- 
+
   close(fd);
   return 0;
 }
@@ -145,13 +146,13 @@ int gpio_get_value(unsigned int gpio, unsigned int *value)
   char ch;
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
- 
+
   fd = open(buf, O_RDONLY);
   if (fd < 0) {
     perror("gpio/get-value");
     return fd;
   }
- 
+
   read(fd, &ch, 1);
 
   if (ch != '0') {
@@ -159,7 +160,7 @@ int gpio_get_value(unsigned int gpio, unsigned int *value)
   } else {
     *value = 0;
   }
- 
+
   close(fd);
   return 0;
 }
@@ -175,14 +176,14 @@ int gpio_set_edge(unsigned int gpio, const char *edge)
   char buf[MAX_BUF];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", gpio);
- 
+
   fd = open(buf, O_WRONLY);
   if (fd < 0) {
     perror("gpio/set-edge");
     return fd;
   }
- 
-  write(fd, edge, strlen(edge) + 1); 
+
+  write(fd, edge, strlen(edge) + 1);
   close(fd);
   return 0;
 }
@@ -197,7 +198,7 @@ int gpio_fd_open(unsigned int gpio)
   char buf[MAX_BUF];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
- 
+
   fd = open(buf, O_RDONLY | O_NONBLOCK );
   if (fd < 0) {
     perror("gpio/fd_open");

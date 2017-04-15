@@ -12,6 +12,18 @@
  * Cross-compile with cross-gcc -I/path/to/cross-kernel/include
  */
 
+
+/*Reminder of arguements for open() command:
+*O_RDONLY
+*    Open for reading only.
+*O_WRONLY
+*    Open for writing only.
+*O_RDWR
+*    Open for reading and writing. The result is undefined if
+*		 this flag is applied to a FIFO.
+*/
+/*fd is "/dev/spidev0.0" in RW mode*/
+
 #include <stdint.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -24,18 +36,22 @@
 #include "gz_clk.h"
 #include "gpio-sysfs.h"
 
+
+/*device points to the string "/dev/spidev0.0" which represents
+device 0, chip select 0*/
+static const char *device = "/dev/spidev0.0";
+// Set the SPI Mode to ClockPhase == 1 and Block Polarity == inverted(1)?
+static uint8_t mode = SPI_CPHA | SPI_CPOL;;
+static uint8_t bits = 8;
+static int drdy_GPIO = 22;
+
+
 //print the error message stored in the string 's' and abort
 static void pabort(const char *s)
 {
 	perror(s);
 	abort();
 }
-//Device points to the string dev0, chip select 0
-static const char *device = "/dev/spidev0.0";
-// Set the SPI Mode to ClockPhase == 1 and Block Polarity == inverted(1)?
-static uint8_t mode = SPI_CPHA | SPI_CPOL;;
-static uint8_t bits = 8;
-static int drdy_GPIO = 22;
 
 static void writeReset(int fd)
 {
@@ -123,35 +139,33 @@ int main(int argc, char *argv[])
 	int ret = 0;
 	int fd;
 	int sysfs_fd;
-
 	int no_tty = !isatty( fileno(stdout) );
 
+  //Open /dev/spidev0.0 for reading and writing.
 	fd = open(device, O_RDWR);
+
+	//If FileDescriptor has failed to open correctly, Abort
 	if (fd < 0)
 		pabort("can't open device");
-
-	/*
-	 * spi mode
-	 */
+//Set the SPI mode of "/dev/spidev0.0"
+	//Send "/dev/spidev0.0" the data of &mode with instruction write mode
 	ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
 	if (ret == -1)
 		pabort("can't set spi mode");
-
+	//Send "/dev/spidev0.0" the data of &mode with instruction read mode
 	ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
 	if (ret == -1)
 		pabort("can't get spi mode");
 
-	/*
-	 * bits per word
-	 */
+//Set the number of bits per word for the spi device and chip "/dev/spidev0.0"
 	ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
 	if (ret == -1)
 		pabort("can't set bits per word");
-
 	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
 	if (ret == -1)
 		pabort("can't get bits per word");
 
+//Print the SPI mode and number of bits per word
 	fprintf(stderr, "spi mode: %d\n", mode);
 	fprintf(stderr, "bits per word: %d\n", bits);
 
@@ -162,9 +176,13 @@ int main(int argc, char *argv[])
 
 	// enables sysfs entry for the GPIO pin
 	gpio_export(drdy_GPIO);
-	// set to input
+	// set to input(0)
 	gpio_set_dir(drdy_GPIO,0);
 	// set interrupt detection to falling edge
+	//When pin !drdy on the AD7705 is low,a new word of data is ready to be read
+	// from the data register of the ADC. Hence, when falling edge is detected,
+	//the AD7705 is ready to send a new word of data to the microprocessor
+	//responsible for handle the data.
 	gpio_set_edge(drdy_GPIO,"falling");
 	// get a file descriptor for the GPIO pin
 	sysfs_fd = gpio_fd_open(drdy_GPIO);
