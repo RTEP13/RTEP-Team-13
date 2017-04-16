@@ -5,7 +5,7 @@ LIBS:KNOWLES
 LIBS:OSRAM
 LIBS:power
 LIBS:RASPBERRY-PI
-EELAYER 26 0
+EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -16,7 +16,7 @@ Rev "1.0.0"
 Comp "Team 13"
 Comment1 "Real Time Embedded Programming"
 Comment2 "University of Glasgow"
-Comment3 ""
+Comment3 "Ciaran Connor"
 Comment4 ""
 $EndDescr
 $Comp
