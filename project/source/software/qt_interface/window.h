@@ -38,6 +38,7 @@ public slots:
 private:
 	// Give samples and num samples, get fft, 	
 	Specanal     fft;
+	ADCreader    adc;
 	
   // graphical elements from the Qwt library - http://qwt.sourceforge.net/annotated.html
 	QwtKnob      knob;
@@ -58,6 +59,8 @@ private:
 	// data arrays for the plot
 	double xData[plotDataSize];
 	double yData[plotDataSize];
+	
+	double outputData[plotDataSize];
 
 	int ringIndex;
 	double gain;

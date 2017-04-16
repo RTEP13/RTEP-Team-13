@@ -64,6 +64,11 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	spec_plot.show();
 
 
+
+/***********INSERT ADC INIT HERE *************/
+
+
+
 	hTimeL.addWidget(&thermo);
 	hTimeL.addWidget(&plot);
 	hSpecL.addLayout(&vSpecOptionsL);
@@ -88,6 +93,9 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 
 void Window::timerEvent( QTimerEvent * )
 {
+
+	/************ GET ADC DATA HERE ***************/
+
 	// generate an sine wave input for example purposes - you must get yours from the A/D!
 	double inVal = gain * sin( M_PI * count/15.0 );
 	++count;
@@ -99,8 +107,16 @@ void Window::timerEvent( QTimerEvent * )
 	// keep yData plot
 	
 	add(inVal);
+	
+	// ringIndex has location of newest. read out from oldest
+	// to newest into an output buffer
+
 //	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );		
 //	yData[plotDataSize-1] = inVal;
+
+	for(int ind=0; ind<plotDataSize; i++){
+		
+	}
 
 	amp_curve.setSamples(xData, yData, plotDataSize);
 	plot.replot();
@@ -136,17 +152,14 @@ void Window::timerEvent( QTimerEvent * )
 
 void Window::add(double val)
 {
-	if(ringIndex==0){
-		yData[ringIndex]=val;
-	}
-	if(ringIndex>plotDataSize-1){
-		yData[ringIndex-1]=val;
-		ringIndex=0;
-		return;
-	} else{
-	yData[ringIndex-1]=val;
-	}
+	yData[ringIndex]=val;
+	xData[ringIndex]=ringIndex;
 	ringIndex++;
+	if(ringIndex>=plotDataSize){
+		ringIndex=0;
+	}
+	
+
 }
 
 // this function can be used to change the gain of the A/D internal amplifier

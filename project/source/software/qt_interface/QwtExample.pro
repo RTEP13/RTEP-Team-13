@@ -10,5 +10,5 @@ TARGET = QwtExample
 
 LIBS += -lqwt -lm -lfftw3
 
-HEADERS += window.h specanal.h
-SOURCES += main.cpp window.cpp specanal.cpp
+HEADERS += window.h specanal.h ADCreader.h
+SOURCES += main.cpp window.cpp specanal.cpp ADCreader.cpp
