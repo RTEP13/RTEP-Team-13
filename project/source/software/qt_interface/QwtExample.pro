@@ -10,6 +10,5 @@ TARGET = QwtExample
 
 LIBS += -lqwt -lm -lfftw3
 
-HEADERS += window.h specanal.h buff.h
-
-SOURCES += main.cpp window.cpp specanal.cpp buff.cpp
+HEADERS += window.h specanal.h
+SOURCES += main.cpp window.cpp specanal.cpp

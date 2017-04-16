@@ -14,7 +14,7 @@
 #include <QPushButton>
 
 #include <specanal.h>
-#include <buff.h>
+
 
 // class definition 'Window'
 class Window : public QWidget
@@ -24,12 +24,13 @@ class Window : public QWidget
 
 public:
 	Window(); // default constructor - called when a Window is declared without arguments
-
+	
 	void timerEvent( QTimerEvent * );
 
 public slots:
 	void setGain(double gain);
 	void setBins(int bins);
+	void add(double val);
 	void stop();
 	void play();
 	void quit();
@@ -37,7 +38,6 @@ public slots:
 private:
 	// Give samples and num samples, get fft, 	
 	Specanal     fft;
-	Buff	     tBuff(int dataSize = 64);
 	
   // graphical elements from the Qwt library - http://qwt.sourceforge.net/annotated.html
 	QwtKnob      knob;
@@ -53,14 +53,14 @@ private:
 	QVBoxLayout  vMainL, vSpecOptionsL, vControlsL;  // vertical layout
 	QHBoxLayout  hTimeL, hSpecL, hPlayPauseL;  // horizontal layout
 
-//	static const int plotDataSize = 128;
+	static const int plotDataSize = 64;
 
 	// data arrays for the plot
-//	double xData[tBuff.dataSize];
-//	double yData[plotDataSize];
+	double xData[plotDataSize];
+	double yData[plotDataSize];
 
+	int ringIndex;
 	double gain;
-	
 	static const int bin_arr_size = 10;
 	int bin_arr[bin_arr_size]={8,16,32,64,
 				128,256,512,

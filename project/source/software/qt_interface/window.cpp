@@ -34,16 +34,17 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	thermo.setRange(0, 10);
 	thermo.show();
 
-	double xData[tBuff.dataSize];
+	ringIndex=0;	
 	// set up the initial plot data
-	for( int index=0; index<tBuff.dataSize; ++index )
+	for( int index=0; index<plotDataSize; ++index )
 	{
 		xData[index] = index;
-		tBuff.yData[index] = gain * sin( M_PI * index/15 );
+		yData[index] = 0;
+//		yData[index] = gain * sin( M_PI * index/15 );
 	}
 	
 	// make a plot curve from the data and attach it to the plot
-	amp_curve.setSamples(xData, tBuff.yData, tBuff.dataSize);
+	amp_curve.setSamples(xData, yData, plotDataSize);
 	amp_curve.attach(&plot);
 	
 	// don't need to fill up pre samples, can all be 0
@@ -97,11 +98,11 @@ void Window::timerEvent( QTimerEvent * )
 	// remove N old samples, add N new samples
 	// keep yData plot
 	
-	tBuff.add(inVal);
+	add(inVal);
 //	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );		
 //	yData[plotDataSize-1] = inVal;
 
-	amp_curve.setSamples(xData, tBuff.yData, tBuff.dataSize);
+	amp_curve.setSamples(xData, yData, plotDataSize);
 	plot.replot();
 
 	// set the thermometer value
@@ -118,9 +119,9 @@ void Window::timerEvent( QTimerEvent * )
 	
 	// could be method, could be threaded
 	if(count > fft.fft_in_size){
-		for(int i=0; i<fft.fft_in_size;i++){
+		for(int i=0; i<fft.fft_in_size-1;i++){
 		//	fft.fft_in[i]=yData[plotDataSize-fft.fft_in_size+i];
-			fft.fft_in[i]=tBuff.yData[i];
+			fft.fft_in[i]=yData[i];
 		}
 		fft.setPlan();
 		fft.executeFFT();
@@ -133,6 +134,20 @@ void Window::timerEvent( QTimerEvent * )
 	
 }
 
+void Window::add(double val)
+{
+	if(ringIndex==0){
+		yData[ringIndex]=val;
+	}
+	if(ringIndex>plotDataSize-1){
+		yData[ringIndex-1]=val;
+		ringIndex=0;
+		return;
+	} else{
+	yData[ringIndex-1]=val;
+	}
+	ringIndex++;
+}
 
 // this function can be used to change the gain of the A/D internal amplifier
 void Window::setGain(double gain)
@@ -154,7 +169,6 @@ void Window::setBins(int bins)
 	this->bins = pbins;
 	printf("setting output bins = %d\tthis bins = %d\n", pbins, this->bins);
 }
-
 
 void Window::quit()
 {
