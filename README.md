@@ -3,9 +3,9 @@
 Audio Level Indicator and Spectrum Analyser for the Raspberry Pi (Zero)
 
 ## Prerequisites
-
-* [Install BCM 2835 Library](http://www.airspayce.com/mikem/bcm2835/)
-   [Version used for this project](http://www.airspayce.com/mikem/bcm2835/bcm2835-1.52.tar.gz) 
+Install BCM 2835 Library
+* [Most latest version can be found from here](http://www.airspayce.com/mikem/bcm2835/)</br>
+* [Version used for this project](http://www.airspayce.com/mikem/bcm2835/bcm2835-1.52.tar.gz) 
    After downloading to the pi, simply do the following from the pi's terminal
    ```
    tar zxvf bcm2835-1.52.tar.gz
