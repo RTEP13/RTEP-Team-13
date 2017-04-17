@@ -14,7 +14,7 @@ public:
 	void setPlan();
 	void executeFFT();
 
-	static const int fft_in_size=64;
+	static const int fft_in_size=32;
 	static const int sampRate = 500;
 //	static const int fft_out_size = sampRate/2;
 	static const int fft_out_size = (fft_in_size/2)+1;

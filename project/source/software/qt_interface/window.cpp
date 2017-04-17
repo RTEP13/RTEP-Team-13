@@ -23,10 +23,8 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0)
 	
 	// set up the volume meter
 	thermo.setFillBrush( QBrush(Qt::green) );
-	thermo.setRange(0, 10);
+	thermo.setRange(0, 9768);
 	thermo.show();
-
-
 
 
 	/****** Initialise plot data *******/
@@ -50,6 +48,7 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0)
 
 	plot.setAxisTitle(plot.xBottom,time_x);
 	plot.setAxisTitle(plot.yLeft, time_y);
+	plot.setAxisScale(plot.yLeft, 0, 9768,0);
 	spec_plot.setAxisTitle(spec_plot.xBottom,spec_x);
 	spec_plot.setAxisTitle(spec_plot.yLeft,spec_y);
 
@@ -77,7 +76,7 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0)
 	vMainL.addLayout(&hSpecL);
 
 	setLayout(&vMainL);
-	usleep(100000);
+	usleep(100);
 	/********** begin adc thread ***********/
 //	adc.run();
 	adc = new ADCreader();
@@ -88,10 +87,6 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0)
 
 void Window::timerEvent( QTimerEvent * )
 {
-
-//	double inVal = gain * sin( M_PI * count/15.0 );
-//	++count;
-
 	// get sample value from adc thread, add to ring buffer.
 	// comment out add and uncomment memmove to for without
 	// ring buffer.
@@ -104,21 +99,21 @@ void Window::timerEvent( QTimerEvent * )
 	plot.replot();
 
 	// set the thermometer value
-	thermo.setValue( adc->value +5);
+	thermo.setValue( adc->value);
 	if(thermo.value()>0){
 		thermo.setFillBrush ( QBrush(Qt::green));
 	}
-	if(thermo.value()>7){
+	if(thermo.value()>19660){
 		thermo.setFillBrush ( QBrush(Qt::yellow));
 	}
-	if(thermo.value()>9){
+	if(thermo.value()<0 || thermo.value()>26214){
 		thermo.setFillBrush ( QBrush(Qt::red));
 	}
-	
-	// could be method, could be threaded
+	count++;	
+	// could be method, could be threaded, could be ring buffer
 	if(count > fft.fft_in_size){
 		for(int i=0; i<fft.fft_in_size-1;i++){
-		//	fft.fft_in[i]=yData[plotDataSize-fft.fft_in_size+i];
+//			fft.fft_in[i]=yData[plotDataSize-fft.fft_in_size+i];
 			fft.fft_in[i]=yData[i];
 		}
 		fft.setPlan();
@@ -134,7 +129,7 @@ void Window::timerEvent( QTimerEvent * )
 
 void Window::add(double val)
 {
-	yData[ringIndex]=val;;
+	yData[ringIndex]=val;
 	ringIndex++;
 	if(ringIndex>=plotDataSize){
 		ringIndex=0;
