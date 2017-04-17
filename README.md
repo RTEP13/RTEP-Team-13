@@ -19,6 +19,7 @@ Install BCM 2835 Library
 ```
 $ sudo apt-get install qt4-dev-tools libqt4-dev qt4-qmake g++ make
 $ sudo apt-get install libqwt-dev libqwt-doc libqwt6
+$ sudo apt-get install xorg
 ```
 
 ## Introduction
