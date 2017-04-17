@@ -4,7 +4,18 @@ Audio Level Indicator and Spectrum Analyser for the Raspberry Pi (Zero)
 
 ## Prerequisites
 
-Ensure to install qt, qwt and other dependencies by entering the following commands into a terminal on the Pi:
+* [Install BCM 2835 Library](http://www.airspayce.com/mikem/bcm2835/)
+   [Version used for this project](http://www.airspayce.com/mikem/bcm2835/bcm2835-1.52.tar.gz) 
+   After downloading to the pi, simply do the following from the pi's terminal
+   ```
+   tar zxvf bcm2835-1.52.tar.gz
+   cd bcm2835-1.52
+   ./configure
+   make
+   sudo make check
+   sudo make install
+   ```
+* Ensure to install qt, qwt and other dependencies by entering the following commands into a terminal on the Pi:
 ```
 $ sudo apt-get install qt4-dev-tools libqt4-dev qt4-qmake g++ make
 $ sudo apt-get install libqwt-dev libqwt-doc libqwt6
