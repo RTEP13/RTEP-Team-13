@@ -38,7 +38,7 @@ private:
 
 	// FFT and ADC classes 	
 	Specanal     fft;
-	ADCreader    adc;
+	ADCreader *adc;
 
 	// Qwt objects
 	QwtKnob      knob;

@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	window.show();
 
 	// call the window.timerEvent function every 40 ms
-	window.startTimer(10);
+	window.startTimer(40);
 
 	// execute the application
 	return app.exec();

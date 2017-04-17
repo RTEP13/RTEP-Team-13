@@ -1,5 +1,5 @@
-#ifndef ADCreader_H
-#define ADCreader_H
+#ifndef ADCREADER
+#define ADCREADER
 
 
 #include <stdint.h>
@@ -38,9 +38,9 @@ public:
 
 	/*device points to the string "/dev/spidev0.0" which represents
 	device 0, chip select 0*/
-	static constexpr const char * const device = "/dev/spidev0.0";
+//	static constexpr const char * const device = "/dev/spidev0.0";
 	
-	static const int drdy_GPIO = 22;
+//	static const int drdy_GPIO = 22;
 
 
 private:
@@ -49,4 +49,4 @@ private:
 
 //ADCreader::mode = SPI_CPHA | SPI_CPOL;
 //ADCreader::bits = 8;
-#endif // ADCreader_H
+#endif // ADCreader

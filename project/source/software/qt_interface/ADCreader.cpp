@@ -6,7 +6,8 @@ ADCreader::ADCreader()
 	// Set the SPI Mode to ClockPhase == 1 and Block Polarity == inverted(1)?
 	const uint8_t mode = SPI_CPHA | SPI_CPOL; 
 	const uint8_t bits = 8;
-
+	static constexpr const char * const device = "/dev/spidev0.0";
+	static const int drdy_GPIO = 22;
 	running = 0;
   //Open /dev/spidev0.0 for reading and writing.
 	fd = open(device, O_RDWR);
@@ -66,10 +67,11 @@ ADCreader::ADCreader()
 	writeReg(fd,0x10);
 	// intiates a self calibration and then after that starts converting
 	writeReg(fd,0x40);
-
+	printf("ADC init complete\n");
 
 }
-void ADCreader::run(){
+void ADCreader::run()
+{
 	running = true;
 	while(running){
 		// let's wait for data for max one second
@@ -91,7 +93,8 @@ void ADCreader::run(){
 	}
 }
 
-void ADCreader::quit(){
+void ADCreader::quit()
+{
 	running = false;
 	exit(0);
 }

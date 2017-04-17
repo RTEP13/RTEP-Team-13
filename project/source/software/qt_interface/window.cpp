@@ -1,4 +1,5 @@
 #include "window.h"
+#include <ADCreader.h>
 #include <cmath>  // for sine stuff
 
 Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0)
@@ -76,9 +77,12 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0)
 	vMainL.addLayout(&hSpecL);
 
 	setLayout(&vMainL);
-
+	usleep(100000);
 	/********** begin adc thread ***********/
-	adc.run();
+//	adc.run();
+	adc = new ADCreader();
+	adc->start();
+
 }
 
 
@@ -91,7 +95,8 @@ void Window::timerEvent( QTimerEvent * )
 	// get sample value from adc thread, add to ring buffer.
 	// comment out add and uncomment memmove to for without
 	// ring buffer.
-	add(adc.value);
+	add(adc->value);
+
 //	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );		
 //	yData[plotDataSize-1] = inVal;
 
@@ -99,7 +104,7 @@ void Window::timerEvent( QTimerEvent * )
 	plot.replot();
 
 	// set the thermometer value
-	thermo.setValue( adc.value +5);
+	thermo.setValue( adc->value +5);
 	if(thermo.value()>0){
 		thermo.setFillBrush ( QBrush(Qt::green));
 	}
@@ -161,14 +166,14 @@ void Window::quit()
 {
 // quits the program, destructor called
 	printf("quitting");
-	adc.quit();	
+//	adc.quit();	
 }
 
 void Window::play()
 {
 // start data aquisition, can only be used if !isPlay
 	printf("playing.. still to implement\n");
-	adc.run();	
+//	adcrun();	
 }
 
 void Window::stop(){
