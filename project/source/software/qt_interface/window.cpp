@@ -1,20 +1,15 @@
 #include "window.h"
-
 #include <cmath>  // for sine stuff
 
-
-Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <-- 'c++ initialisation list' - google it!
+Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0)
 {
-	// set up the gain knob
-//	knob.setValue(gain);
-
 	help_text.setReadOnly(1);
 	help_text.setText(infoStr);
 
 	playBtn.setText("Play");
 	stopBtn.setText("Stop");
 	quitBtn.setText("Quit");
-	// either valueChanged or onClick?
+
 	connect ( &playBtn, SIGNAL(clicked()), SLOT(play()) );
 	connect ( &stopBtn, SIGNAL(clicked()), SLOT(stop()) );
 	connect ( &quitBtn, SIGNAL(clicked()), SLOT(quit()) );
@@ -25,22 +20,20 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	spinner.setValue(bin_arr[bin_arr_pos]);
 	connect(&spinner, SIGNAL(valueChanged(int)), SLOT(setBins(int)) ); 	
 	
-	// use the Qt signals/slots framework to update the gain -
-	// every time the knob is moved, the setGain function will be called
-//	connect( &knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
-
-	// set up the thermometer
+	// set up the volume meter
 	thermo.setFillBrush( QBrush(Qt::green) );
 	thermo.setRange(0, 10);
 	thermo.show();
 
+
+
+
+	/****** Initialise plot data *******/
 	ringIndex=0;	
-	// set up the initial plot data
 	for( int index=0; index<plotDataSize; ++index )
 	{
 		xData[index] = index;
 		yData[index] = 0;
-//		yData[index] = gain * sin( M_PI * index/15 );
 	}
 	
 	// make a plot curve from the data and attach it to the plot
@@ -58,16 +51,11 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	plot.setAxisTitle(plot.yLeft, time_y);
 	spec_plot.setAxisTitle(spec_plot.xBottom,spec_x);
 	spec_plot.setAxisTitle(spec_plot.yLeft,spec_y);
-//	spec_plot.setAxisScale(spec_plot.yLeft,0, 100,0);
 
 	plot.show();
 	spec_plot.show();
 
-
-
-/***********INSERT ADC INIT HERE *************/
-
-
+	/************ Creating layouts ***********/
 
 	hTimeL.addWidget(&thermo);
 	hTimeL.addWidget(&plot);
@@ -88,41 +76,30 @@ Window::Window() : plot( QString("Spectrum Analyer") ), gain(5), count(0) // <--
 	vMainL.addLayout(&hSpecL);
 
 	setLayout(&vMainL);
+
+	/********** begin adc thread ***********/
+	adc.run();
 }
 
 
 void Window::timerEvent( QTimerEvent * )
 {
 
-	/************ GET ADC DATA HERE ***************/
+//	double inVal = gain * sin( M_PI * count/15.0 );
+//	++count;
 
-	// generate an sine wave input for example purposes - you must get yours from the A/D!
-	double inVal = gain * sin( M_PI * count/15.0 );
-	++count;
-
-	// add the new input to the plot
-	// implement ring buffer here
-	
-	// remove N old samples, add N new samples
-	// keep yData plot
-	
-	add(inVal);
-	
-	// ringIndex has location of newest. read out from oldest
-	// to newest into an output buffer
-
+	// get sample value from adc thread, add to ring buffer.
+	// comment out add and uncomment memmove to for without
+	// ring buffer.
+	add(adc.value);
 //	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );		
 //	yData[plotDataSize-1] = inVal;
-
-	for(int ind=0; ind<plotDataSize; i++){
-		
-	}
 
 	amp_curve.setSamples(xData, yData, plotDataSize);
 	plot.replot();
 
 	// set the thermometer value
-	thermo.setValue( inVal +5);
+	thermo.setValue( adc.value +5);
 	if(thermo.value()>0){
 		thermo.setFillBrush ( QBrush(Qt::green));
 	}
@@ -152,14 +129,11 @@ void Window::timerEvent( QTimerEvent * )
 
 void Window::add(double val)
 {
-	yData[ringIndex]=val;
-	xData[ringIndex]=ringIndex;
+	yData[ringIndex]=val;;
 	ringIndex++;
 	if(ringIndex>=plotDataSize){
 		ringIndex=0;
 	}
-	
-
 }
 
 // this function can be used to change the gain of the A/D internal amplifier
@@ -186,13 +160,15 @@ void Window::setBins(int bins)
 void Window::quit()
 {
 // quits the program, destructor called
-	printf("quitting.. still to implement\n");
+	printf("quitting");
+	adc.quit();	
 }
 
 void Window::play()
 {
 // start data aquisition, can only be used if !isPlay
 	printf("playing.. still to implement\n");
+	adc.run();	
 }
 
 void Window::stop(){

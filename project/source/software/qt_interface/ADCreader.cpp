@@ -1,13 +1,10 @@
 #include <ADCreader.h>
 
+const uint8_t ADCreader::mode;
+const uint8_t ADCreader::bits;
 // constructor
 ADCreader::ADCreader()
 {
-	int ret = 0;
-	int fd;
-	int sysfs_fd;
-	int no_tty = !isatty( fileno(stdout) );
-
   //Open /dev/spidev0.0 for reading and writing.
 	fd = open(device, O_RDWR);
 
@@ -81,8 +78,9 @@ void ADCreader::run(){
 		// tell the AD7705 to read the data register (16 bits)
 		writeReg(fd,0x38);
 		// read the data register by performing two 8 bit reads
-		int value = readData(fd)-0x8000;
+		value = readData(fd)-0x8000;
 		fprintf(stderr,"data = %d       \r",value);
+	
 		// if stdout is redirected to a file or pipe, output the data
 		if( no_tty ){
 			printf("%d\n", value);
@@ -98,13 +96,13 @@ void ADCreader::quit(){
 
 
 //print the error message stored in the string 's' and abort
-static void pabort(const char *s)
+void ADCreader::pabort(const char *s)
 {
 	perror(s);
 	abort();
 }
 
-static void writeReset(int fd){
+void ADCreader::writeReset(int fd){
 	int ret;
 	uint8_t tx1[5] = {0xff,0xff,0xff,0xff,0xff};
 	uint8_t rx1[5] = {0};
@@ -122,7 +120,7 @@ static void writeReset(int fd){
 	}
 }
 
-static void writeReg(int fd, uint8_t v){
+void ADCreader::writeReg(int fd, uint8_t v){
 	int ret;
 	uint8_t tx1[1];
 	tx1[0] = v;
@@ -139,7 +137,7 @@ static void writeReg(int fd, uint8_t v){
 	if (ret < 1){pabort("can't send spi message");}
 }
 
-static uint8_t readReg(int fd){
+uint8_t ADCreader::readReg(int fd){
 	int ret;
 	uint8_t tx1[1];
 	tx1[0] = 0;
@@ -158,7 +156,7 @@ static uint8_t readReg(int fd){
 	return rx1[0];
 }
 
-static int readData(int fd)
+int ADCreader::readData(int fd)
 {
 	int ret;
 	uint8_t tx1[2] = {0,0};
