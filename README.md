@@ -43,5 +43,5 @@ To run software from directory qt\_interface:
 ```
 $ ./QwtExample
 ```
-![Alt text](/project/source/hardware/kicad/_plot/png/rtep-audio-spectrum-analyser-ray-traced.png?raw=true)
+![Alt text](https://raw.githubusercontent.com/RTEP13/rtep-spectrum-analyser/master/project/source/hardware/SPH0645LM4H-B_Mic_Board/_plot/png/rtep-audio-spectrum-analyser-ray-traced.png)
 
