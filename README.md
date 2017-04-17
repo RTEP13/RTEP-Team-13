@@ -24,11 +24,14 @@ $ sudo apt-get install xorg
 
 ## Introduction
 
-** Still a work in progress **
 
 The goal of this project is to provide a hardware and software solution for a real-time audio level indicator and spectrum analyser for the Raspberry Pi Zero.
 
 The Raspberry Pi Zero can be configured as a USB virtual network gadget can can communicate to a PC through an SSH network connection. The user interface is provided making use of X forwarding using the X Windows System with the Pi Zero hosting the application.
+
+The original idea for the project was unfortunately not completed due to hardware development and fabrication delays. The PCB was fabricated in China and the time required for fabrication and delivery meant that there was little time to write and test software for the platform.
+
+The AD7705 ADC was used as a backup to demonstrate real time data acquisition using SPI and to demonstrate the QT spectrum analyser.
 
 ## Hardware requirements
 
@@ -53,7 +56,7 @@ $ make
 ```
 To run software from directory qt\_interface:
 ```
-$ ./QwtExample
+$ ./qtexample
 ```
 ![Alt text](https://raw.githubusercontent.com/RTEP13/rtep-spectrum-analyser/master/project/source/hardware/SPH0645LM4H-B_Mic_Board/_plot/png/rtep-audio-spectrum-analyser-ray-traced.png)
 
