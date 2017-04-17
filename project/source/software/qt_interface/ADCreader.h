@@ -14,7 +14,9 @@
 #include <gz_clk.h>
 #include <gpio-sysfs.h>
 
-class ADCreader
+#include <QThread>
+
+class ADCreader : public QThread
 {
 
 public:
@@ -38,9 +40,6 @@ public:
 	device 0, chip select 0*/
 	static constexpr const char * const device = "/dev/spidev0.0";
 	
-	// Set the SPI Mode to ClockPhase == 1 and Block Polarity == inverted(1)?
-	static const uint8_t mode=SPI_CPHA | SPI_CPOL;
-	static const uint8_t bits=8;
 	static const int drdy_GPIO = 22;
 
 

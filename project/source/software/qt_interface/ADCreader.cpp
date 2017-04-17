@@ -1,13 +1,15 @@
 #include <ADCreader.h>
 
-const uint8_t ADCreader::mode;
-const uint8_t ADCreader::bits;
 // constructor
 ADCreader::ADCreader()
 {
+	// Set the SPI Mode to ClockPhase == 1 and Block Polarity == inverted(1)?
+	const uint8_t mode = SPI_CPHA | SPI_CPOL; 
+	const uint8_t bits = 8;
+
+	running = 0;
   //Open /dev/spidev0.0 for reading and writing.
 	fd = open(device, O_RDWR);
-
 	//If FileDescriptor has failed to open correctly, Abort
 	if (fd < 0)
 		pabort("can't open device");
