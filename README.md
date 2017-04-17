@@ -3,10 +3,11 @@
 Audio Level Indicator and Spectrum Analyser for the Raspberry Pi (Zero)
 
 ## Prerequisites
-Ensure to install qt, qwt and other dependencies by entering the following commands into a terminal on the Pi: <br />
-sudo apt-get install qt4-dev-tools libqt4-dev qt4-qmake g++ make qtcreator <br />
-sudo apt-get install libqwt-dev libqwt-doc libqwt6
-
+Ensure to install qt, qwt and other dependencies by entering the following commands into a terminal on the Pi:
+```
+$ sudo apt-get install qt4-dev-tools libqt4-dev qt4-qmake g++ make
+$ sudo apt-get install libqwt-dev libqwt-doc libqwt6
+```
 ## Introduction
 
 ** Still a work in progress **
@@ -26,5 +27,19 @@ The Raspberry Pi Zero can be configured as a USB virtual network gadget can can 
 * [FFTW3](http://www.fftw.org/) - Software library for computing DFTs
 * [QT](https://www.qt.io/) - Provides user experience
 
+
+## Software build
+
+To build:
+```
+$ git clone git@github.com:RTEP13/rtep-spectrum-analyser.git
+$ cd rtep-spectrum-analyser/project/source/software/qt_interface
+$ qmake
+$ make
+```
+To run software from directory qt\_interface:
+```
+$ ./QwtExample
+```
 ![Alt text](/project/source/hardware/kicad/_plot/png/rtep-audio-spectrum-analyser-ray-traced.png?raw=true)
 
