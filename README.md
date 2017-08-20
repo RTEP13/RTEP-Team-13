@@ -1,6 +1,8 @@
-# Real Time Spectrum Analyser
+#Real Time Spectrum Analyser
 
-Audio Level Indicator and Spectrum Analyser for the Raspberry Pi (Zero)
+Audio Level Indicator and Spectrum Analyser for the Raspberry Pi (Zero).
+
+The contents of this repository were part of a university project and is no longer being maintained. Further information on the project can be found in the wiki.
 
 ## Prerequisites
 Install BCM 2835 Library
